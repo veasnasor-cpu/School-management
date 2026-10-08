@@ -53,6 +53,9 @@ jobs:
           touch database/ci.sqlite
 
           php artisan migrate:fresh --force --env=testing
+          
+      - name: Generate Laravel Application Key
+        run: php artisan key:generate --env=testing
 
       - name: Run Laravel tests
         run: php artisan test
