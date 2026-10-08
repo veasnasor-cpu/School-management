@@ -22,6 +22,7 @@ jobs:
       QUEUE_CONNECTION: sync
       HASH_DRIVER: bcrypt
       BCRYPT_ROUNDS: 4
+      HASH_VERIFY: false
 
     steps:
       - name: Checkout source
@@ -38,24 +39,23 @@ jobs:
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
 
-      - name: Prepare environment and database
+      - name: Prepare environment
         run: |
           cp .env.example .env
 
           if [ -f .env.testing.example ]; then
             cp .env.testing.example .env.testing
+          else
+            cp .env .env.testing
           fi
 
           php artisan key:generate --env=testing
+
           php artisan config:clear
-          php artisan config:cache --env=testing
 
           touch database/ci.sqlite
 
           php artisan migrate:fresh --force --env=testing
-          
-      - name: Generate Laravel Application Key
-        run: php artisan key:generate --env=testing
 
       - name: Run Laravel tests
         run: php artisan test
