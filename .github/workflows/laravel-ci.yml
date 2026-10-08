@@ -1,4 +1,3 @@
-```yaml
 name: Laravel CI
 
 on:
@@ -54,4 +53,4 @@ jobs:
 
       - name: Run Laravel tests
         run: php artisan test
-```
+
